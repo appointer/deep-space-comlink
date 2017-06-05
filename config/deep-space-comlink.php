@@ -11,7 +11,10 @@ return [
 
     'package' => [
         // Push certificate to sign the push package.
-        'certificate' => '/path/to/certificate.pem',
+        'certificate' => [
+            'path' => '/path/to/certificate.pem',
+            'passphrase' => '',
+        ],
 
         // Base which a pushpackage is created upon. It holds a template for the website.json as well as all icons.
         'template_path' => __DIR__ . '/../resources/pushpackage',

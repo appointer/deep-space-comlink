@@ -82,7 +82,7 @@ class PackageGenerator
         $zipPath = $package->getZipPath();
 
         if (!is_dir($packageDir)) {
-            mkdir($packageDir);
+            mkdir($packageDir, 0777, true);
         }
 
         $this->copyPackageFiles($package);
@@ -130,7 +130,7 @@ class PackageGenerator
 
             if ($rawFile === 'website.json') {
                 $websiteJson = file_get_contents($filePath);
-                $websiteJson = str_replace('{{ userId }}', $package->getUserId(), $websiteJson);
+                $websiteJson = str_replace('{{ authenticationToken }}', $package->getAuthenticationToken(), $websiteJson);
                 $websiteJson = str_replace('{{ host }}', $this->host, $websiteJson);
                 $websiteJson = str_replace('{{ websiteName }}', $this->websiteName, $websiteJson);
                 $websiteJson = str_replace('{{ websitePushId }}', $this->websitePushId, $websiteJson);

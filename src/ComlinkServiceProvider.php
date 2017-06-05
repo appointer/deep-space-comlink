@@ -21,7 +21,7 @@ class ComlinkServiceProvider extends ServiceProvider
     {
         // Publish pushpackge to modify icons and stuff.
         $this->publishes([
-            __DIR__ . '/../resources/pushpackage' => resource_path('pushpackage'),
+            __DIR__ . '/../resources/pushpackage/' => resource_path('pushpackage'),
         ], 'pushpackage');
 
         // Publish package config.
@@ -38,6 +38,7 @@ class ComlinkServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/deep-space-comlink.php', 'deep-space-comlink');
 
         $this->registerPackager();
+        $this->registerCertificate();
         $this->registerAuthenticationTokenResolver();
     }
 
@@ -50,11 +51,26 @@ class ComlinkServiceProvider extends ServiceProvider
     {
         $this->app->bind(PackageGenerator::class, function ($app) {
             return new PackageGenerator(
-                $app['config']('deep-space-comlink.package.certificate'),
-                $app['config']('deep-space-comlink.package.template_path'),
-                $app['config']('app.url'),
-                $app['config']('deep-space-comlink.website.name'),
-                $app['config']('deep-space-comlink.website.name')
+                $app['dsc.certificate'],
+                $app['config']->get('deep-space-comlink.package.template_path'),
+                $app['config']->get('app.url'),
+                $app['config']->get('deep-space-comlink.website.name'),
+                $app['config']->get('deep-space-comlink.website.pushId')
+            );
+        });
+    }
+
+    /**
+     * Register the certificate handle.
+     *
+     * @return void
+     */
+    protected function registerCertificate()
+    {
+        $this->app->bind('dsc.certificate', function ($app) {
+            return new Certificate(
+                $app['config']->get('deep-space-comlink.package.certificate.path'),
+                $app['config']->get('deep-space-comlink.package.certificate.passphrase')
             );
         });
     }
@@ -64,8 +80,8 @@ class ComlinkServiceProvider extends ServiceProvider
      */
     protected function registerAuthenticationTokenResolver()
     {
-        $this->app->bind(PackageGenerator::class, function ($app) {
-            return bcrypt( $app['auth']->user()->id );
+        $this->app->bind('dsc.authentication-token', function ($app) {
+            return bcrypt(str_random(16));
         });
     }
 
@@ -76,6 +92,10 @@ class ComlinkServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [PackageGenerator::class];
+        return [
+            PackageGenerator::class,
+            'dsc.authentication-token',
+            'dsc.certificate',
+        ];
     }
 }

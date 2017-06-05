@@ -17,7 +17,7 @@ class PackageController
     public function show($version, $websitePushId, PackageGenerator $generator)
     {
         // Create the pushpackage.
-        $package = $generator->createPushPackageForIdentifier('');
+        $package = $generator->createPushPackageForIdentifier(app('dsc.authentication-token'));
 
         // Return with the contents of the zip file.
         return response(file_get_contents($package->getZipPath()), 200, [

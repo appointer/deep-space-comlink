@@ -2,10 +2,9 @@
   "websiteName": "{{ websiteName }}",
   "websitePushID": "{{ websitePushId }}",
   "allowedDomains": [
-    "http://{{ host }}",
-    "https://{{ host }}"
+    "{{ host }}"
   ],
-  "urlFormatString": "http://{{ host }}/%@",
-  "authenticationToken": "{{ userId }}",
-  "webServiceURL": "https://{{ host }}/safari_push_notifications/{{ userId }}"
+  "urlFormatString": "{{ host }}/%@",
+  "authenticationToken": "{{ authenticationToken }}",
+  "webServiceURL": "{{ host }}/dsc"
 }
