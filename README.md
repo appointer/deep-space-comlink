@@ -42,8 +42,8 @@ public function boot()
 Use the following artisan command:
 
 ```bash
-php artisan vendor:publish --provider="Appointer\DeepSpaceComlink\ComlinkServiceProvider::class" --tag="config"
-php artisan vendor:publish --provider="Appointer\DeepSpaceComlink\ComlinkServiceProvider::class" --tag="pushpackage"
+php artisan vendor:publish --provider="Appointer\DeepSpaceComlink\ComlinkServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Appointer\DeepSpaceComlink\ComlinkServiceProvider" --tag="pushpackage"
 ```
 
 ### Implementing the javascript
@@ -67,7 +67,7 @@ var checkRemotePermission = function (permissionData) {
     if (permissionData.permission === 'default') {
         // This is a new web service URL and its validity is unknown.
         window.safari.pushNotification.requestPermission(
-            'https://domain.example.com', // The web service URL.
+            'https://domain.example.com/dsc', // The web service URL.
             'web.com.example.domain',     // The Website Push ID.
             {}, // Data that you choose to send to your server to help you identify the user.
             checkRemotePermission         // The callback function.
