@@ -1,6 +1,6 @@
 {
   "name": "appointer/deep-space-comlink",
-  "description": "A package to handle web push in a sofisticated way.",
+  "description": "A package to handle web push in a sophisticated way.",
   "type": "library",
   "license": "MIT",
   "authors": [
