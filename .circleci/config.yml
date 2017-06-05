@@ -2,12 +2,15 @@ version: 2
 jobs:
   build:
     docker:
-      - image: php:7.1-fpm
+      - image: appointer/php71fpm-ci
         environment:
           APP_ENV: local
           APP_DEBUG: true
     working_directory: /var/www/html
     steps:
+      - run:
+          name: Install System Dependencies
+          command: apt-get install -y php7.1-zip
       - checkout
       - run:
           name: Install Composer
