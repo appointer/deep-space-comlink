@@ -17,12 +17,12 @@ class Certificate
     /**
      * Construct.
      *
-     * @param string $certificateString
+     * @param string $path
      * @param string $password
      */
-    public function __construct(string $certificateString, ?string $password = null)
+    public function __construct(string $path, ?string $password = null)
     {
-        $this->certificateString = $certificateString;
+        $this->certificateString = file_get_contents($path);
         $this->password = $password;
     }
 
