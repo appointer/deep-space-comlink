@@ -70,7 +70,8 @@ class ComlinkServiceProvider extends ServiceProvider
         $this->app->bind('dsc.certificate', function ($app) {
             return new Certificate(
                 $app['config']->get('deep-space-comlink.package.certificate.path'),
-                $app['config']->get('deep-space-comlink.package.certificate.passphrase')
+                $app['config']->get('deep-space-comlink.package.certificate.passphrase'),
+                $app['config']->get('deep-space-comlink.package.certificate.intermediate')
             );
         });
     }

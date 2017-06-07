@@ -57,7 +57,7 @@ class Certificate
      *
      * @return string
      */
-    public function getExtraCert(): string
+    public function getExtraCert(): ?string
     {
         return $this->extraCert;
     }
