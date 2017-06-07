@@ -13,17 +13,23 @@ class Certificate
      * @var string
      */
     private $password;
+    /**
+     * @var string
+     */
+    private $extraCert;
 
     /**
      * Construct.
      *
      * @param string $path
      * @param string $password
+     * @param string $extraCert
      */
-    public function __construct(string $path, ?string $password = null)
+    public function __construct(string $path, ?string $password = null, ?string $extraCert = null)
     {
         $this->certificateString = file_get_contents($path);
         $this->password = $password;
+        $this->extraCert = $extraCert;
     }
 
     /**
@@ -44,6 +50,16 @@ class Certificate
     public function getPassword(): ?string
     {
         return $this->password;
+    }
+
+    /**
+     * Gets the path to the intermediate certificate.
+     *
+     * @return string
+     */
+    public function getExtraCert(): string
+    {
+        return $this->extraCert;
     }
 
     /**

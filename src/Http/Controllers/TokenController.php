@@ -2,6 +2,8 @@
 
 namespace Appointer\DeepSpaceComlink\Http\Controllers;
 
+use Exception;
+
 class TokenController
 {
     /**
@@ -14,6 +16,7 @@ class TokenController
      * @param $version
      * @param $deviceToken
      * @param $websitePushId
+     * @throws Exception
      */
     public function store($version, $deviceToken, $websitePushId)
     {
@@ -27,6 +30,7 @@ class TokenController
      * @param $version
      * @param $deviceToken
      * @param $websitePushId
+     * @throws Exception
      */
     public function destroy($version, $deviceToken, $websitePushId)
     {

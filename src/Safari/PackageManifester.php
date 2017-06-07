@@ -12,7 +12,7 @@ class PackageManifester
      */
     public function createManifest(Package $package): string
     {
-        $manifestData = array();
+        $manifestData = [];
         foreach (Package::$packageFiles as $rawFile) {
             $filePath = sprintf('%s/%s', $package->getPackageDir(), $rawFile);
             $manifestData[$rawFile] = sha1(file_get_contents($filePath));

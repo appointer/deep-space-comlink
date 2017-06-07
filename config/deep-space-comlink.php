@@ -12,7 +12,8 @@ return [
     'package' => [
         // Push certificate to sign the push package.
         'certificate' => [
-            'path' => '/path/to/certificate.pem',
+            'intermediate' => '/path/to/extracert.pem',
+            'path' => '/path/to/certificate.p12',
             'passphrase' => '',
         ],
 
