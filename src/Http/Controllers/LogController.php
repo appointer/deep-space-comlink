@@ -18,10 +18,10 @@ class LogController
      */
     public function store($version, Request $request, Log $logger)
     {
-        $logger->error('deep-space-comlink logged a Safari push error.', [
-            'logs' => $request->all(),
-            'version' => $version
-        ]);
+        $logger->error('deep-space-comlink logged a Safari push error.',
+            $request->all() + [
+                'version' => $version
+            ]);
 
         // Return with an empty OK response.
         return response('');

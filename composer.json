@@ -25,7 +25,8 @@
     "ext-zip": "*",
     "illuminate/contracts": "~5.0",
     "illuminate/http": "~5.0",
-    "illuminate/support": "~5.0"
+    "illuminate/support": "~5.0",
+    "illuminate/events": "~5.0"
   },
   "require-dev": {
     "orchestra/testbench": "^3.4",

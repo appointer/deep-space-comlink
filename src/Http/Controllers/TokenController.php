@@ -2,10 +2,30 @@
 
 namespace Appointer\DeepSpaceComlink\Http\Controllers;
 
-use Exception;
+use Appointer\DeepSpaceComlink\Events\WebPushSubscribed;
+use Appointer\DeepSpaceComlink\Events\WebPushUnsubscribed;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Http\Request;
 
 class TokenController
 {
+    /**
+     * The event dispatcher instance.
+     *
+     * @var Dispatcher
+     */
+    private $events;
+
+    /**
+     * TokenController constructor.
+     *
+     * @param Dispatcher $events
+     */
+    function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
+
     /**
      * Respond to this request by saving the device token in a database that you can later reference when you send push notifications.
      * Also, change the user’s settings in your database to the values indicated by the parameterized dictionary for the device.
@@ -16,11 +36,15 @@ class TokenController
      * @param $version
      * @param $deviceToken
      * @param $websitePushId
-     * @throws Exception
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function store($version, $deviceToken, $websitePushId)
+    public function store($version, $deviceToken, $websitePushId, Request $request)
     {
-        throw new Exception('This is not yet implemented. Please overwrite \'' . TokenController::class . '@store\' and implement it yourself.');
+        $this->events->dispatch(new WebPushSubscribed($version, $deviceToken, $websitePushId, $request->all()));
+
+        // Return with an empty OK response.
+        return response('');
     }
 
     /**
@@ -30,10 +54,14 @@ class TokenController
      * @param $version
      * @param $deviceToken
      * @param $websitePushId
-     * @throws Exception
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function destroy($version, $deviceToken, $websitePushId)
+    public function destroy($version, $deviceToken, $websitePushId, Request $request)
     {
-        throw new Exception('This is not yet implemented. Please overwrite \'' . TokenController::class . '@destroy\' and implement it yourself.');
+        $this->events->dispatch(new WebPushUnsubscribed($version, $deviceToken, $websitePushId, $request->all()));
+
+        // Return with an empty OK response.
+        return response('');
     }
 }
