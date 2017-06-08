@@ -43,7 +43,9 @@ class TokenController
     public function store($version, $deviceToken, $websitePushId, Request $request)
     {
         // Decrypt our user info.
-        $userInfo = decrypt($this->extractAuthenticationToken($request));
+        $userInfo = $this->extractUserInfo(
+            $this->extractAuthenticationToken($request)
+        );
 
         $this->events->dispatch(new WebPushSubscribed($version, $deviceToken, $websitePushId, $userInfo));
 
@@ -64,12 +66,41 @@ class TokenController
     public function destroy($version, $deviceToken, $websitePushId, Request $request)
     {
         // Decrypt our user info.
-        $userInfo = decrypt($this->extractAuthenticationToken($request));
+        $userInfo = $this->extractUserInfo(
+            $this->extractAuthenticationToken($request)
+        );
 
         $this->events->dispatch(new WebPushUnsubscribed($version, $deviceToken, $websitePushId, $userInfo));
 
         // Return with an empty OK response.
         return response('');
+    }
+
+    /**
+     * Extract the user information from auth token.
+     *
+     * @param string $authenticationToken
+     * @return array
+     */
+    private function extractUserInfo(string $authenticationToken): array
+    {
+        try {
+            $userInfo = json_decode(
+                decrypt($authenticationToken),
+                true /* extract as assoc array */
+            );
+
+            if ($userInfo === null) {
+                throw new Exception('UserInfo is not in a valid JSON format.');
+            }
+
+            // Return successful decoded user info.
+            return $userInfo;
+        } catch (Exception $exc) {
+            // Return the plain auth token in error case. This could be, because
+            // the user decided to handle the token resolver by himself.
+            return $authenticationToken;
+        }
     }
 
     /**
