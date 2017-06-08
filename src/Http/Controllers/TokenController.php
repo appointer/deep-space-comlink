@@ -4,6 +4,7 @@ namespace Appointer\DeepSpaceComlink\Http\Controllers;
 
 use Appointer\DeepSpaceComlink\Events\WebPushSubscribed;
 use Appointer\DeepSpaceComlink\Events\WebPushUnsubscribed;
+use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 
@@ -41,7 +42,10 @@ class TokenController
      */
     public function store($version, $deviceToken, $websitePushId, Request $request)
     {
-        $this->events->dispatch(new WebPushSubscribed($version, $deviceToken, $websitePushId, $request->all()));
+        // Decrypt our user info.
+        $userInfo = decrypt($this->extractAuthenticationToken($request));
+
+        $this->events->dispatch(new WebPushSubscribed($version, $deviceToken, $websitePushId, $userInfo));
 
         // Return with an empty OK response.
         return response('');
@@ -59,9 +63,34 @@ class TokenController
      */
     public function destroy($version, $deviceToken, $websitePushId, Request $request)
     {
-        $this->events->dispatch(new WebPushUnsubscribed($version, $deviceToken, $websitePushId, $request->all()));
+        // Decrypt our user info.
+        $userInfo = decrypt($this->extractAuthenticationToken($request));
+
+        $this->events->dispatch(new WebPushUnsubscribed($version, $deviceToken, $websitePushId, $userInfo));
 
         // Return with an empty OK response.
         return response('');
+    }
+
+    /**
+     * Extract the authentication header token.
+     *
+     * @param Request $request
+     * @return string
+     * @throws Exception
+     */
+    private function extractAuthenticationToken(Request $request): string
+    {
+        $authenticationHeader = collect(
+            explode(' ', $request->header('Authorization'))
+        );
+
+        // Check if the header was valid.
+        if ($authenticationHeader->count() < 2) {
+            throw new Exception('Received invalid authentication header.');
+        }
+
+        // The last part is the actuall value.
+        return $authenticationHeader->last();
     }
 }

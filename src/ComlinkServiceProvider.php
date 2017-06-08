@@ -82,7 +82,9 @@ class ComlinkServiceProvider extends ServiceProvider
     protected function registerAuthenticationTokenResolver()
     {
         $this->app->bind('dsc.authentication-token', function ($app) {
-            return bcrypt(str_random(16));
+            return function($userInfo) {
+                return encrypt($userInfo);
+            };
         });
     }
 
