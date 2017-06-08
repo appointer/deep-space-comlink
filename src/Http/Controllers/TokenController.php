@@ -80,22 +80,13 @@ class TokenController
      * Extract the user information from auth token.
      *
      * @param string $authenticationToken
-     * @return array
+     * @return mixed
      */
-    private function extractUserInfo(string $authenticationToken): array
+    private function extractUserInfo(string $authenticationToken)
     {
         try {
-            $userInfo = json_decode(
-                decrypt($authenticationToken),
-                true /* extract as assoc array */
-            );
-
-            if ($userInfo === null) {
-                throw new Exception('UserInfo is not in a valid JSON format.');
-            }
-
             // Return successful decoded user info.
-            return $userInfo;
+            return decrypt($authenticationToken);
         } catch (Exception $exc) {
             // Return the plain auth token in error case. This could be, because
             // the user decided to handle the token resolver by himself.
