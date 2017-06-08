@@ -64,7 +64,7 @@ class PackageGenerator
      */
     public function createPushPackageForIdentifier(string $authenticationToken): Package
     {
-        $packageDir = sprintf('/%s/pushPackage%s.%s', sys_get_temp_dir(), time(), $authenticationToken);
+        $packageDir = sprintf('/%s/pushPackage%s', sys_get_temp_dir(), time());
         $package = $this->createPackage($packageDir, $authenticationToken);
 
         $this->generatePackage($package);
